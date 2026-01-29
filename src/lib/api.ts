@@ -126,6 +126,14 @@ class ApiClient {
   async health() {
     return this.fetch<{ status: string; timestamp: string }>('/health');
   }
+
+  // H-2 fix: Auth validation with role check
+  async validateAuth(apiKey: string) {
+    return this.fetch<{ valid: boolean; role: 'admin' | 'user' | null; timestamp?: string }>('/auth/validate', {
+      method: 'POST',
+      body: JSON.stringify({ apiKey }),
+    });
+  }
 }
 
 export const api = new ApiClient();

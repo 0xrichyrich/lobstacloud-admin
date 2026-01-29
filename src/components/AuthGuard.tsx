@@ -22,15 +22,28 @@ export default function AuthGuard({ children }: AuthGuardProps) {
     }
   }, []);
 
+  // H-2 fix: Validate API key and check for admin role
   const validateKey = async (key: string) => {
     try {
       api.setApiKey(key);
-      await api.health();
+      
+      // Use the new auth validation endpoint that returns role info
+      const result = await api.validateAuth(key);
+      
+      if (!result.valid) {
+        throw new Error('Invalid API key');
+      }
+      
+      // H-2 fix: Only allow admin role access to admin panel
+      if (result.role !== 'admin') {
+        throw new Error('Admin access required');
+      }
+      
       setIsAuthenticated(true);
       setError('');
-    } catch {
+    } catch (e) {
       api.clearApiKey();
-      setError('Invalid API key');
+      setError(e instanceof Error ? e.message : 'Invalid API key');
       setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
