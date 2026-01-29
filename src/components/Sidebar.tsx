@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { api } from '@/lib/api';
+import { signOut, useSession } from 'next-auth/react';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊' },
@@ -13,10 +13,10 @@ const navItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
 
-  const handleLogout = () => {
-    api.clearApiKey();
-    window.location.reload();
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/login' });
   };
 
   return (
@@ -52,6 +52,11 @@ export default function Sidebar() {
       </nav>
       
       <div className="p-4 border-t border-[var(--border)]">
+        {session?.user?.email && (
+          <div className="px-4 py-2 mb-2 text-xs text-[var(--muted)] truncate">
+            {session.user.email}
+          </div>
+        )}
         <button
           onClick={handleLogout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[var(--card-hover)] text-[var(--muted)] transition"

@@ -43,6 +43,7 @@ class ApiClient {
       ...(options.headers as Record<string, string>),
     };
 
+    // Get API key from localStorage (legacy support) or use admin key from env
     const apiKey = this.getApiKey();
     if (apiKey) {
       headers['X-API-Key'] = apiKey;
@@ -127,7 +128,7 @@ class ApiClient {
     return this.fetch<{ status: string; timestamp: string }>('/health');
   }
 
-  // H-2 fix: Auth validation with role check
+  // Auth validation - now uses the configured API key
   async validateAuth(apiKey: string) {
     return this.fetch<{ valid: boolean; role: 'admin' | 'user' | null; timestamp?: string }>('/auth/validate', {
       method: 'POST',
