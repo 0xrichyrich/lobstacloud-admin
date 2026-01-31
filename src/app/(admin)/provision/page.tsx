@@ -11,7 +11,7 @@ function ProvisionForm() {
 
   const [formData, setFormData] = useState({
     subdomain: '',
-    plan: 'starter' as 'starter' | 'pro' | 'enterprise',
+    plan: 'starter' as 'starter' | 'pro' | 'business',
     customer_email: '',
     customer_name: '',
     existing_customer_id: preselectedCustomer || '',
@@ -85,9 +85,9 @@ function ProvisionForm() {
   };
 
   const planPricing = {
-    starter: { price: 29, features: ['1 vCPU', '1GB RAM', '10GB Storage', 'Basic Support'] },
-    pro: { price: 79, features: ['2 vCPU', '4GB RAM', '50GB Storage', 'Priority Support'] },
-    enterprise: { price: 199, features: ['4 vCPU', '8GB RAM', '100GB Storage', '24/7 Support'] },
+    starter: { price: 9.99, features: ['1 vCPU', '2 GB RAM', '55 GB SSD', 'Community Support'] },
+    pro: { price: 29.99, features: ['2 vCPU', '4 GB RAM', '80 GB SSD', 'Priority Support'] },
+    business: { price: 99.99, features: ['4 vCPU', '8 GB RAM', '160 GB SSD', '24/7 Support'] },
   };
 
   return (
