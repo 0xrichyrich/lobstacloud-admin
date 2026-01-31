@@ -5,7 +5,7 @@ interface PlanBadgeProps {
 const planConfig: Record<string, { bg: string; text: string; label: string }> = {
   starter: { bg: 'bg-blue-500/20', text: 'text-blue-400', label: 'Starter' },
   pro: { bg: 'bg-purple-500/20', text: 'text-purple-400', label: 'Pro' },
-  enterprise: { bg: 'bg-amber-500/20', text: 'text-amber-400', label: 'Enterprise' },
+  business: { bg: 'bg-amber-500/20', text: 'text-amber-400', label: 'Business' },
 };
 
 export default function PlanBadge({ plan }: PlanBadgeProps) {

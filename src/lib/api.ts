@@ -145,7 +145,7 @@ export interface Gateway {
   subdomain: string;
   domain: string;
   status: 'provisioning' | 'active' | 'stopped' | 'error' | 'deprovisioning';
-  plan: 'starter' | 'pro' | 'enterprise';
+  plan: 'starter' | 'pro' | 'business';
   customer_id: string;
   customer_email?: string;
   ip_address?: string;
@@ -172,7 +172,7 @@ export interface Stats {
   gateways_by_plan: {
     starter: number;
     pro: number;
-    enterprise: number;
+    business: number;
   };
   gateways_by_status: {
     active: number;
@@ -184,13 +184,13 @@ export interface Stats {
 
 export interface CreateGatewayRequest {
   subdomain: string;
-  plan: 'starter' | 'pro' | 'enterprise';
+  plan: 'starter' | 'pro' | 'business';
   customer_id: string;
 }
 
 export interface ProvisionRequest {
   subdomain: string;
-  plan: 'starter' | 'pro' | 'enterprise';
+  plan: 'starter' | 'pro' | 'business';
   customer_email: string;
   customer_name?: string;
 }

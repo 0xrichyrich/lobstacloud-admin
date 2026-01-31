@@ -144,13 +144,13 @@ export default function DashboardPage() {
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-amber-400">Enterprise</span>
-                <span>{stats?.gateways_by_plan?.enterprise || 0}</span>
+                <span>{stats?.gateways_by_plan?.business || 0}</span>
               </div>
               <div className="h-2 bg-[var(--background)] rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-amber-500 rounded-full"
                   style={{ 
-                    width: `${((stats?.gateways_by_plan?.enterprise || 0) / (stats?.total_gateways || 1)) * 100}%` 
+                    width: `${((stats?.gateways_by_plan?.business || 0) / (stats?.total_gateways || 1)) * 100}%` 
                   }}
                 />
               </div>
