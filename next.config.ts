@@ -26,13 +26,18 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // Next.js needs these
+      "script-src 'self' 'unsafe-inline'", // M-5 FIX: Removed unsafe-eval
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: https:",
       "font-src 'self'",
       "connect-src 'self' https://api.redlobsta.cloud",
       "frame-ancestors 'none'",
     ].join('; '),
+  },
+  // C-4 FIX: Restrict CORS to admin domain only (no wildcard)
+  {
+    key: 'Access-Control-Allow-Origin',
+    value: 'https://admin.redlobsta.com',
   },
 ];
 

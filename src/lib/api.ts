@@ -1,34 +1,17 @@
+// H-3 FIX: API key is stored server-side only (via env var), never in localStorage
+// Client-side requests go through Next.js API routes which add the key server-side
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://api.redlobsta.cloud';
+
+// Server-side API key — only available in server components/routes
+const SERVER_API_KEY = typeof window === 'undefined' 
+  ? (process.env.LOBSTA_API_KEY || process.env.ADMIN_API_KEY || '')
+  : '';
 
 interface FetchOptions extends RequestInit {
   params?: Record<string, string>;
 }
 
 class ApiClient {
-  private apiKey: string | null = null;
-
-  setApiKey(key: string) {
-    this.apiKey = key;
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('lobsta_api_key', key);
-    }
-  }
-
-  getApiKey(): string | null {
-    if (this.apiKey) return this.apiKey;
-    if (typeof window !== 'undefined') {
-      this.apiKey = localStorage.getItem('lobsta_api_key');
-    }
-    return this.apiKey;
-  }
-
-  clearApiKey() {
-    this.apiKey = null;
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('lobsta_api_key');
-    }
-  }
-
   async fetch<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
     const { params, ...fetchOptions } = options;
     
@@ -43,10 +26,9 @@ class ApiClient {
       ...(options.headers as Record<string, string>),
     };
 
-    // Get API key from localStorage (legacy support) or use admin key from env
-    const apiKey = this.getApiKey();
-    if (apiKey) {
-      headers['X-API-Key'] = apiKey;
+    // H-3 FIX: API key is only available server-side via env var
+    if (SERVER_API_KEY) {
+      headers['Authorization'] = `Bearer ${SERVER_API_KEY}`;
     }
 
     const response = await fetch(url, {
@@ -128,11 +110,10 @@ class ApiClient {
     return this.fetch<{ status: string; timestamp: string }>('/health');
   }
 
-  // Auth validation - now uses the configured API key
-  async validateAuth(apiKey: string) {
+  // Auth validation — server-side only (API key from env)
+  async validateAuth() {
     return this.fetch<{ valid: boolean; role: 'admin' | 'user' | null; timestamp?: string }>('/auth/validate', {
       method: 'POST',
-      body: JSON.stringify({ apiKey }),
     });
   }
 }
